@@ -1,8 +1,12 @@
 [tool.poetry]
 name = "htmlviewer"
-version = "0.1.1.10"
+version = "0.1.2"
 description = "Table viewer for relational databases, without using HandsOnTable."
 authors = ["Pacharapol Withayasakpunt <patarapolw@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/patarapolw/htmlviewer"
+homepage = "https://github.com/patarapolw/htmlviewer"
 
 [tool.poetry.dependencies]
 python = "*"

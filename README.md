@@ -1,5 +1,8 @@
 # HTMLViewer
 
+[![PyPI version shields.io](https://img.shields.io/pypi/v/htmlviewer.svg)](https://pypi.python.org/pypi/htmlviewer/)
+[![PyPI license](https://img.shields.io/pypi/l/htmlviewer.svg)](https://pypi.python.org/pypi/htmlviewer/)
+
 Table viewer for relational databases, without using HandsOnTable.
 
 Actually, any list of JSON-serializable dictionaries can be viewed.
