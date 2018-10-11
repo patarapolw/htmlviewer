@@ -10,7 +10,18 @@ env = Environment(
 
 
 def generate_html(data, **kwargs):
+    rowHeader = kwargs.get('rowHeader', None)
+    colHeader = []
+    for record in data:
+        for k in record.keys():
+            if k not in colHeader:
+                if k == rowHeader:
+                    colHeader.insert(0, k)
+                else:
+                    colHeader.append(k)
+
     config = {
+        'colHeader': colHeader,
         'data': data,
         'maxColWidth': 200,
         'maxRowHeight': 500,

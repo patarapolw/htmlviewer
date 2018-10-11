@@ -37,11 +37,12 @@ Acceptable kwargs are,
 ```python
 {
     'maxColWidth': 200,  # Maximum column width for all columns.
+    'minColWidth': '8em',
     'maxRowHeight': 500,  # Maximum row height for all rows.,
-    'colWidths': {
+    'colWidth': {
         'imageField': 500
     },
-    'renderers': {
+    'renderer': {
         'imageField': 'html'  # Set the field to allow HTML.
     }
     'rowHeader': 'id'  # Selecting a custom column to be the first row, aka rowHeader.
