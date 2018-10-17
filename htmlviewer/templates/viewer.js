@@ -9,6 +9,12 @@ String.prototype.hashCode = function() {
     return hash;
 };
 
+defaultConfig = {
+    maxColWidth: 400,
+    minColWidth: 50
+}
+
+Object.assign(config, defaultConfig);
 Object.keys(config).forEach(key=>{
     if(key.charAt(key.length - 1) === 's'){
         config[key.slice(0, -1)] = config[key]
@@ -69,8 +75,6 @@ function makeTable(config){
             case "number":
                 th.style.minWidth = config.minColWidth + 'px';
                 break;
-            default:
-                th.style.minWidth = key.length + 'em';
         }
 
         if (config.colWidth[key]){
@@ -114,25 +118,29 @@ function makeTable(config){
                 case "string":
                     switch(whatIsIt(config.renderer)){
                         case "Object":
-                            if (config.renderer[key] === 'html') {
-                                wrapped.innerHTML = record[key];
-                            } else {
-                                wrapped.textContent = record[key];
+                            switch(config.renderer[key]){
+                                case 'html':
+                                    wrapped.innerHTML = record[key];
+                                    break;
+                                default:
+                                    wrapped.innerHTML = textToHTML(record[key]);
                             }
                             break;
                         case "string":
-                            if (config.renderer === 'html') {
-                                wrapped.innerHTML = record[key];
-                            } else {
-                                wrapped.textContent = record[key];
+                            switch(config.renderer) {
+                                case 'html':
+                                    wrapped.innerHTML = record[key];
+                                    break;
+                                default:
+                                    wrapped.innerHTML = textToHTML(record[key]);
                             }
                             break;
                         default:
-                            wrapped.textContent = record[key];
+                            wrapped.innerHTML = textToHTML(record[key]);
                     }
                     break;
                 default:
-                    if(record[key]) wrapped.textContent = record[key];
+                    if(record[key]) wrapped.innerHTML = textToHTML(record[key]);
             }
 
             tr.appendChild(td);
@@ -154,11 +162,21 @@ function makeTable(config){
     let totalWidth = 0;
     
     colHeader.forEach(key=>{
+        const el = document.getElementById('col' + key.hashCode());
+
         if (config.colWidth[key]){
-            document.getElementById('col' + key.hashCode()).style.width = config.colWidth[key] + 'px';
+            el.style.width = config.colWidth[key] + 'px';
             totalWidth += config.colWidth[key];
         } else {
-            totalWidth += document.getElementById('col' + key.hashCode()).clientWidth;
+            let width = el.clientWidth;
+
+            const maxWidth = parseFloat(el.style.maxWidth);
+            const minWidth = parseFloat(getComputedStyle(el).fontSize) * el.textContent.length;
+            if (width > maxWidth) width = maxWidth;
+            else if (width < minWidth) width = minWidth;
+
+            el.style.width = width + 'px';
+            totalWidth += width;
         }
     });
 
@@ -184,4 +202,15 @@ function whatIsIt(object) {
     else {
         return typeof object;
     }
+}
+
+function textToHTML(text)
+{
+    return ((text || "") + "")  // make sure it is a string;
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\t/g, "    ")
+        .replace(/ /g, "&#8203;&nbsp;&#8203;")
+        .replace(/\r\n|\r|\n/g, "<br />");
 }

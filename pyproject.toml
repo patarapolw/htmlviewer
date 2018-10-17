@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "htmlviewer"
-version = "0.1.6"
+version = "0.1.7"
 description = "Table viewer for relational databases, without using HandsOnTable."
 authors = ["Pacharapol Withayasakpunt <patarapolw@gmail.com>"]
 license = "MIT"

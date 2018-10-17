@@ -4,6 +4,8 @@ import os
 from threading import Timer
 from IPython.display import IFrame
 
+from .util import is_html
+
 env = Environment(
     loader=PackageLoader('htmlviewer', 'templates')
 )
@@ -12,19 +14,26 @@ env = Environment(
 def generate_html(data, **kwargs):
     rowHeader = kwargs.get('rowHeader', None)
     colHeader = []
+    renderer = dict()
+
     for record in data:
-        for k in record.keys():
+        for k, v in record.items():
             if k not in colHeader:
                 if k == rowHeader:
                     colHeader.insert(0, k)
                 else:
                     colHeader.append(k)
 
+            if kwargs.get('detectHTML', False):
+                if isinstance(v, str) and is_html(v):
+                    renderer[k] = v
+
     config = {
         'colHeader': colHeader,
         'data': data,
         'maxColWidth': 200,
         'maxRowHeight': 500,
+        'renderer': renderer
     }
     config.update(kwargs)
 
